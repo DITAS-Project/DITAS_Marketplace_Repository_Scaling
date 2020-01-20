@@ -1,0 +1,11 @@
+FROM ubuntu:latest
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get -y install openssh-server mongodb
+RUN useradd hduser -d /home/hduser -g sudo -m
+RUN echo hduser:'basmat!Pass9' | chpasswd
+RUN echo "hduser ALL = NOPASSWD: ALL" | tee -a /etc/sudoers
+RUN echo "AllowUsers hduser" | tee -a /etc/ssh/sshd_config
+RUN su hduser -c 'mkdir -p ~/mongodb/dbC'
+RUN su hduser -c 'mkdir -p ~/mongologs/dbC'
+EXPOSE 27018
+ENTRYPOINT su hduser -c 'mongod --port 27018 --bind_ip_all --dbpath ~/mongodb/dbC --configsvr --replSet rsC | tee ~/mongologs/dbC/log'

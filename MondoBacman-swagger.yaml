@@ -1,0 +1,349 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/VPsomak/Mondo-Bacman/1.0.0
+  - description: Localhost default server
+    url: http://localhost:5000
+info:
+  description: MonDo-BaCMan API for DITAS 
+  version: "1.0.0"
+  title: MonDoBacMan  
+  contact:
+    email: vpsomak@mail.ntua.gr
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /manager/destroyCluster:
+    post:
+      summary: Destroys a MongoDB cluster and removes the associated containers.
+      operationId: destroyCluster
+      description: |
+        By passing in the access point to a MongoDB cluster, the manager look ups the
+        assosiated containers by using the provided username and the cluster map
+        provided by the MongoDB cluster server. Then it removes each container
+        from the cluster deleting it from both cluster configuration and from
+        the docker application hosting it.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DestroyerConfig'
+        description: Configuration of the cluster destroyer.
+      responses:
+        '200':
+          description: Cluster Destroyed Succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessOutput'
+  /manager/getClusterMap:
+    post:
+      summary: Gets the current cluster map from a MongoDB cluster access point.
+      operationId: getClusterMap
+      description: |
+        By passing in the access point to a MongoDB cluster, the manager requests
+        the current cluster map as the mongos instance reads it. This includes
+        all the participating configuration and sharding members with their
+        replica set IDs, IPs and ports.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MongoAPConfig'
+        description: Configuration of the cluster access point.
+      responses:
+        '200':
+          description: The cluster map object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterMapOutput'
+  /manager/runCluster:
+    post:
+      summary: Creates a MongoDB cluster and runs the associated containers.
+      operationId: runCluster
+      description: |
+        By passing in a MongoDB cluster blueprint the described cluster is created
+        by running the appropriate containers and configuring the MongoDB instances
+        running on them. Then the list of access points to this new cluster is
+        returned as a response.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatorConfig'
+        description: Configuration of the cluster creator.
+      responses:
+        '200':
+          description: The created cluster access points
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClusterCreatedOutput'
+  /manager/addServer:
+    post:
+      summary: Adds a new server to a MongoDB cluster and runs the associated container.
+      operationId: addServer
+      description: |
+        By passing in a MongoDB machine's specifications a new container matching these
+        specifications is created. If a matching container is already created then it
+        is started or restarted. Then the MongoDB cluster settings and the replica set
+        settings are updated to include this machine.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdderConfig'
+        description: Configuration of the server adder.
+      responses:
+        '200':
+          description: The success message with the new container's ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessOutput'
+  /manager/removeServer:
+    post:
+      summary: Removes a server from a MongoDB cluster and removes the associated container.
+      operationId: removeServer
+      description: |
+        By passing in a container's ID we can delete this container and remove it from
+        any Replica Sets and clusters it is a part of.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoverConfig'
+        description: Configuration of the server remover.
+      responses:
+        '200':
+          description: The success message with the removed container's ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessOutput'
+components:
+  schemas:
+    CreatorConfig:
+      type: object
+      required:
+        - username
+        - base_url
+        - app
+        - shard
+        - config
+      properties:
+        default_host:
+          type: string
+          example: '192.168.1.7'
+          description: 'The IP or domain name of the default host for the containers to be created. This is overrided by the host attribute of a machine in the app, shard or config lists. If this element is not present then each machine MUST specify a host.'
+        app:
+          type: array
+          items: 
+            $ref: '#/components/schemas/MongoMachine'
+          description: 'The list of application servers for the cluster (mongos instances).'
+        shard:
+          type: array
+          items: 
+            $ref: '#/components/schemas/MongoMachine'
+          description: 'The list of shard servers for the cluster.'
+        config:
+          type: array
+          items: 
+            $ref: '#/components/schemas/MongoMachine'
+          description: 'The list of configuration servers for the cluster.'
+        base_url:
+          type: string
+          format: url
+          example: 'unix://var/run/docker.sock'
+          description: 'The url of the docker application hosting the containers.'
+        username:
+          type: string
+          example: John_Doe
+          description: 'The username of the creator of the containers.'
+    DestroyerConfig:
+      type: object
+      required:
+        - username
+        - base_url
+        - mongo_server
+        - mongo_port
+      properties:
+        mongo_server:
+          type: string
+          example: localhost
+          description: 'The IP or domain name of the MongoDB cluster access point.'
+        mongo_port:
+          type: integer
+          example: 27017
+          description: 'The Port of the MongoDB cluster access point.'
+        base_url:
+          type: string
+          format: url
+          example: 'unix://var/run/docker.sock'
+          description: 'The url of the docker application hosting the containers.'
+        username:
+          type: string
+          example: John_Doe
+          description: 'The username of the creator of the containers.'
+    RemoverConfig:
+      type: object
+      required:
+        - username
+        - base_url
+        - mongo_server
+        - mongo_port
+        - id
+      properties:
+        mongo_server:
+          type: string
+          example: localhost
+          description: 'The IP or domain name of the MongoDB cluster access point.'
+        mongo_port:
+          type: integer
+          example: 27017
+          description: 'The Port of the MongoDB cluster access point.'
+        base_url:
+          type: string
+          format: url
+          example: 'unix://var/run/docker.sock'
+          description: 'The url of the docker application hosting the containers.'
+        username:
+          type: string
+          example: John_Doe
+          description: 'The username of the creator of the containers.'
+        id:
+          type: string
+          example: '98fgd7va09xv7'
+          description: 'The container ID to be removed from the cluster.'
+    AdderConfig:
+      type: object
+      required:
+        - username
+        - base_url
+        - mongo_server
+        - mongo_port
+      properties:
+        mongo_server:
+          type: string
+          example: localhost
+          description: 'The IP or domain name of the MongoDB cluster access point.'
+        mongo_port:
+          type: integer
+          example: 27017
+          description: 'The Port of the MongoDB cluster access point.'
+        base_url:
+          type: string
+          format: url
+          example: 'unix://var/run/docker.sock'
+          description: 'The url of the docker application hosting the containers.'
+        username:
+          type: string
+          example: John_Doe
+          description: 'The username of the creator of the containers.'
+        rs:
+          type: string
+          example: 'C'
+          description: 'The replica set ID for this machine.'
+        type:
+          type: string
+          enum: 
+            - config
+            - app
+            - shard
+          description: 'The role of this new machine in the cluster.'
+        host:
+          type: string
+          example: localhost
+          description: 'The IP or domain name of the new server.'
+        port:
+          type: integer
+          example: 27017
+          description: 'The Port that the new server will listen on.'
+        id:
+          type: string
+          example: '98fgd7va09xv7'
+          description: 'The container ID to be added to the cluster if it is available and known.'
+    MongoAPConfig:
+      type: object
+      required:
+        - username
+        - mongo_server
+        - mongo_port
+      properties:
+        mongo_server:
+          type: string
+          example: localhost
+          description: 'The IP or domain name of the MongoDB cluster access point.'
+        mongo_port:
+          type: integer
+          example: 27017
+          description: 'The Port of the MongoDB cluster access point.'
+        username:
+          type: string
+          example: John_Doe
+          description: 'The username of the creator of the containers.'
+    SuccessOutput:
+      properties:
+        success:
+          type: string
+          example: 'operation ok'
+          description: 'The message for the requested operation as the mongo or docker provided it.'
+        error:
+          type: string
+          example: 'NullPointer Exception'
+          description: 'The message for the error occured as the mongo, python or docker provided it.'
+      type: object
+    ClusterMapOutput:
+      properties:
+        config:
+          type: string
+          example: 'rsC/192.168.1.15:27018,192.168.1.15:27019'
+          description: 'The replica set ID, the IPs and the ports of all configuration servers in this cluster.'
+        rsID:
+          type: string
+          example: 'rsID/192.168.1.15:27020,192.168.1.15:27021'
+          description: 'The replica set ID, the IPs and the ports of all sharding servers in this replica set.'
+        rsID2:
+          type: string
+          example: 'rsID2/192.168.1.16:27020,192.168.1.16:27021'
+          description: 'The replica set ID, the IPs and the ports of all sharding servers in this replica set.'
+        rsIDX:
+          type: string
+          example: 'rsIDX/192.168.1.1X:27020,192.168.1.1X:27021'
+          description: 'The replica set ID, the IPs and the ports of all sharding servers in this replica set.'
+      type: object
+    ClusterCreatedOutput:
+      properties:
+        access_points:
+          type: array
+          items: 
+            type: string
+            example: 'localhost:27017'
+          description: 'The list of access points for the newly created cluster.'
+        debug:
+          type: string
+          example: 'rs0 initiated succesfuly.'
+          description: 'Debug messages detailing the process of cluster creation step by step and any possible errors in that process.'
+      type: object
+    MongoMachine:
+      type: object
+      required:
+        - rs
+        - port
+      properties:
+        rs:
+          type: string
+          example: 'C'
+          description: 'The name of the replica set this member will belong to.'
+        host:
+          type: string
+          example: '192.168.1.15'
+          description: 'The IP or domain name of this container that is to be created.'
+        port:
+          type: integer
+          example: 27020
+          description: 'The port that this container will listen on.'
+      description: 'A MongoDB server instance.'

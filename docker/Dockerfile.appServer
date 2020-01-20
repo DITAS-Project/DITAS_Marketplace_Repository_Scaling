@@ -1,0 +1,12 @@
+FROM ubuntu:latest
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get -y install openssh-server mongodb
+RUN useradd hduser -d /home/hduser -g sudo -m
+RUN echo hduser:'basmat!Pass9' | chpasswd
+RUN echo "hduser ALL = NOPASSWD: ALL" | tee -a /etc/sudoers
+RUN echo "AllowUsers hduser" | tee -a /etc/ssh/sshd_config
+RUN su hduser -c 'mkdir -p ~/mongologs/dbS'
+EXPOSE 27017
+ARG configsvr
+ENV configsvr=$configsvr
+ENTRYPOINT su hduser -c 'mongos --port 27017 --bind_ip_all --configdb $configsvr | tee ~/mongologs/dbS/log'

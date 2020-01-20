@@ -1,0 +1,114 @@
+/*
+ * This file is part of DITAS Marketplace Repository Scaling.
+ * 
+ * DITAS Marketplace Repository Scaling is free software: you can redistribute it 
+ * and/or modify it under the terms of the GNU General Public License as 
+ * published by the Free Software Foundation, either version 3 of the License, 
+ * or (at your option) any later version.
+ * 
+ * DITAS Marketplace Repository Scaling is distributed in the hope that it will be 
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with DITAS Marketplace Repository Scaling.  
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * DITAS Marketplace Repository Scaling is being developed for the
+ * DITAS Project: https://www.ditas-project.eu/
+ */
+body{
+   position: relative;
+   z-index: 1; 
+   width: 100%;
+   height: 100%;
+   background-color:black; 
+   padding-top: 30px;
+   color: white;
+}
+#mainContent{
+	position: relative;
+	z-index: 1;
+	text-align: center;
+	padding-bottom:40px;
+}			
+*.d-none{
+	display: none;
+}
+div.console{
+	overflow-x: hide;
+	overflow-y: scroll;
+	width:100%;
+	min-height: 200px;
+	height:50%;
+	color: green;
+	text-align: left;
+}
+.dataTable{
+	margin-left: auto;
+	margin-right: auto;
+	text-align:center;
+}
+.dataTable td{
+	padding: 0px 5px;
+	border: 1px solid grey;
+}
+.dataTable th{
+	padding: 5px;
+	border: 1px solid grey;
+	font-weight: bold;
+}
+#createClusterTextarea{
+	width:50%;
+	height:50%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	display:block;
+}
+.clusterInfo td{
+	text-align:center;
+}
+.loadingDiv{
+	height:200px;
+	width:100%;
+	background-image:url('images/loading.gif');
+	background-repeat:no-repeat;
+	background-color:black;
+	background-position:center;
+	background-size:auto 250px;
+}
+.actionsDiv{
+	padding-left:20px !important;
+	padding-right:20px !important;
+	text-align:center;
+}
+.actionButton {
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+    border: 1px ridge grey;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+}
+.actionButton:hover {
+	box-shadow: 0 0 10px #8A8;
+}
+.deleteButton{
+	background-image:url('images/deleteButton.png');
+}
+.powerButton{
+	background-image:url('images/powerButton.png');
+}
+.scaleUpButton{
+	background-image:url('images/scaleUpButton.png');
+}
+.scaleDownButton{
+	background-image:url('images/scaleDownButton.png');
+}

@@ -1,0 +1,94 @@
+<!--
+This file is part of DITAS Marketplace Repository Scaling.
+
+DITAS Marketplace Repository Scaling is free software: you can redistribute it 
+and/or modify it under the terms of the GNU General Public License as 
+published by the Free Software Foundation, either version 3 of the License, 
+or (at your option) any later version.
+ 
+DITAS Marketplace Repository Scaling is distributed in the hope that it will be 
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with DITAS Marketplace Repository Scaling.  
+If not, see <https://www.gnu.org/licenses/>.
+
+DITAS Marketplace Repository Scaling is being developed for the
+DITAS Project: https://www.ditas-project.eu/
+-->
+
+<html>
+<head>
+	<link rel="stylesheet" href="jquery-ui.css">
+	<link rel="stylesheet" href="uiStyling.css">
+    <script src="jquery-3.4.1.js"></script>
+	<script src="jquery-ui.js"></script>
+</head>
+<body>
+    <span id="pageLogo"></span>
+    <div id="mainContent">
+		<ul>
+			<li id="loginTab"><a href="#loginScreen">Login</a></li>
+			<li id="imagesTab" class="d-none"><a href="#dockerImageBox">Images</a></li>
+			<li id="containersTab" class="d-none"><a href="#dockerContainersBox">Containers</a></li>
+			<li id="clustersTab" class="d-none"><a href="#mongoClusterBox">Clusters</a></li>
+		</ul>
+	
+		<div id="loginScreen">
+			<input placeholder='Username' value="Silvestro" type='text' name='username' id='usernameInput' required>
+			<input placeholder='Docker Hosts' value="tcp://83.212.115.138:2376" type='text' name='dockerhost' id='dockerhostInput' required>
+			<button value="Login" id="loginButton" onClick="login();">Login</button>
+		</div>
+		<div id="dockerImageBox" class="">
+			<p>Available Images:</p>
+			<table id="imagesArray" class="dataTable d-none">
+			</table>
+			<div id="imagesLoading" class="loadingDiv"></div>
+			<p>New Image:<p>
+			<select class="imageDataField" data-field="type">
+				<option value="">Server Type</option>
+				<option value="base">Base Server</option>
+				<option value="app">Mongos Server</option>
+				<option value="config">Configuration Server</option>
+				<option value="shard">Shard Server</option>
+			</select>
+			<input placeholder="ReplicaSet Name" type="text" class="imageDataField" data-field="rs"/>
+			<input title="URL Example: rsC/192.168.1.7:50118" placeholder="Configuration Host URL" type="text" class="imageDataField" value="rsC/83.212.115.138:50118" data-field="config_host"/>
+			<button id="createImageButton" onClick="createImage();">Create Image</button>
+			<div id="imageStreamConsole" class="console"></div>
+		</div>
+		<div id="dockerContainersBox" class="">
+			<p>Available Containers:</p>
+			<table id="containersArray" class="dataTable d-none">
+			</table>
+			<div id="containersLoading" class="loadingDiv"></div>
+			<p>Run Container:<p>
+			<select class="containerDataField" data-field="type">
+				<option value="">Server Type</option>
+				<option value="base">Base Server</option>
+				<option value="app">Mongos Server</option>
+				<option value="config">Configuration Server</option>
+				<option value="shard">Shard Server</option>
+			</select>
+			<input placeholder="ReplicaSet Name" type="text" class="containerDataField" data-field="rs" required/>
+			<input placeholder="Host URL" type="text" value="192.168.1.8" class="containerDataField" data-field="host" required/>
+			<input placeholder="Port Number" type="number" class="containerDataField" data-field="port" required/>
+			<button id="createImageButton" onClick="runContainer();">Run Container</button>
+			<div id="containerStreamConsole" class="console"></div>
+		</div>
+		<div id="mongoClusterBox">
+			<p>Available Clusters:</p>
+			<table id="clustersArray" class="dataTable d-none">
+			<div id="clustersLoading" class="loadingDiv"></div>
+			</table>
+			<p>New Cluster:<p>
+			<textarea id="createClusterTextarea" placeholder="Cluster Configuration"></textarea>
+			<button id="createClusterButton" onClick="createCluster();">Create Cluster</button>
+			<div id="clusterStreamConsole" class="console"></div>
+		</div>
+    </div>
+</body>
+<script src="uiScripts.js"></script>
+</html>
