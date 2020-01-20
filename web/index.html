@@ -37,8 +37,8 @@ DITAS Project: https://www.ditas-project.eu/
 		</ul>
 	
 		<div id="loginScreen">
-			<input placeholder='Username' value="Silvestro" type='text' name='username' id='usernameInput' required>
-			<input placeholder='Docker Hosts' value="tcp://83.212.115.138:2376" type='text' name='dockerhost' id='dockerhostInput' required>
+			<input placeholder='Username' type='text' name='username' id='usernameInput' required>
+			<input placeholder='Docker Hosts' type='text' name='dockerhost' id='dockerhostInput' required>
 			<button value="Login" id="loginButton" onClick="login();">Login</button>
 		</div>
 		<div id="dockerImageBox" class="">
@@ -55,7 +55,7 @@ DITAS Project: https://www.ditas-project.eu/
 				<option value="shard">Shard Server</option>
 			</select>
 			<input placeholder="ReplicaSet Name" type="text" class="imageDataField" data-field="rs"/>
-			<input title="URL Example: rsC/192.168.1.7:50118" placeholder="Configuration Host URL" type="text" class="imageDataField" value="rsC/83.212.115.138:50118" data-field="config_host"/>
+			<input title="URL Example: rsC/192.168.1.7:50118" placeholder="Configuration Host URL" type="text" class="imageDataField" data-field="config_host"/>
 			<button id="createImageButton" onClick="createImage();">Create Image</button>
 			<div id="imageStreamConsole" class="console"></div>
 		</div>
@@ -73,7 +73,7 @@ DITAS Project: https://www.ditas-project.eu/
 				<option value="shard">Shard Server</option>
 			</select>
 			<input placeholder="ReplicaSet Name" type="text" class="containerDataField" data-field="rs" required/>
-			<input placeholder="Host URL" type="text" value="192.168.1.8" class="containerDataField" data-field="host" required/>
+			<input placeholder="Host URL" type="text" class="containerDataField" data-field="host" required/>
 			<input placeholder="Port Number" type="number" class="containerDataField" data-field="port" required/>
 			<button id="createImageButton" onClick="runContainer();">Run Container</button>
 			<div id="containerStreamConsole" class="console"></div>
