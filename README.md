@@ -1,6 +1,10 @@
 # DITAS_Marketplace_Repository_Scaling
 This repository contains all the API methods and UI of the Marketplace Repository Scaling
 
+## Introduction
+
+The Marketplace Repository Scaling is essentially a database management system for the DITAS Marketplace. It is used to improve the response times and general performance of the Resolution Engine by monitoring the utilization and performance of it's repositories. It is studying the choke points and tries to amend them by taking advantage of the container technology and the opportunity that MongoDB provides to cluster on the fly (from 3.6+ version). It can instantiate new MongoDB clusters and add new servers to the cluster or remove an unused server from the cluster during runtime, providing assistance to overloaded servers or removing underloaded ones, freeing unused resources. Three requirements are tackled using this component; It ensures business continuity and disaster recovery by using the scaling mechanisms of MongoDB, adding redundancy and availability of the services, thus addressing the requirement T3.6. At the same time this scalability aids the Resolution Engine scalability by matching any scaling process with the scaling process in the appropriate underlying repository, better addressing the requirement T3.10. Finally, by employing Docker, we can use dynamic architectures for the repositories, making use of machines of various capabilities, types, and topologies addressing the requirement B3.6.
+
 ## License
 This file is part of DITAS Marketplace Repository Scaling.
 
